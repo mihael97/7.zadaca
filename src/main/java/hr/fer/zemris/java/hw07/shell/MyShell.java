@@ -14,6 +14,7 @@ import hr.fer.zemris.java.hw07.shell.commands.CopyShellCommand;
 import hr.fer.zemris.java.hw07.shell.commands.ExitShellCommand;
 import hr.fer.zemris.java.hw07.shell.commands.Functions;
 import hr.fer.zemris.java.hw07.shell.commands.HelpShellCommand;
+import hr.fer.zemris.java.hw07.shell.commands.HexdumpShellCommand;
 import hr.fer.zemris.java.hw07.shell.commands.LsShellCommand;
 import hr.fer.zemris.java.hw07.shell.commands.MkdirShellCommand;
 import hr.fer.zemris.java.hw07.shell.commands.TreeShellCommand;
@@ -44,7 +45,7 @@ public class MyShell implements Environment {
 	/**
 	 * Referenca na scanner koji prima upis s ulaza
 	 */
-	private static Scanner sc;
+	public static Scanner sc;
 
 	/**
 	 * Metoda inicijalizira početne simbole i mapu naredb
@@ -63,6 +64,7 @@ public class MyShell implements Environment {
 		commands.put("help", new HelpShellCommand());
 		commands.put("ls", new LsShellCommand());
 		commands.put("mkdir", new MkdirShellCommand());
+		commands.put("hexdump", new HexdumpShellCommand());
 		commands.put("tree", new TreeShellCommand());
 
 		System.out.print("Welcome to MyShell v 1.0");
@@ -222,8 +224,7 @@ public class MyShell implements Environment {
 			if (Character.isLetter(array[index]) && name == false) {
 				name = true;
 			} else if (Character.isWhitespace(array[index]) && name == true) {
-				System.out.println(line.substring(0, index));
-				if (commands.containsKey(line.substring(0, index))) {
+				if (commands.containsKey(line.substring(0, index)) || line.startsWith("symbol")) {
 					return line.substring(0, index);
 				}
 
@@ -278,6 +279,62 @@ public class MyShell implements Environment {
 	}
 
 	/**
+	 * Metoda koja postavlja/ispisuje znakove za početak naredbe ili višelinijske
+	 * naredbe. PROMPT - znak za početak naredbe,MORELINES - znak na kraju linije
+	 * naredbe koji pokazuje da je ostatak naredbe u sljedećem redu,MULTILINES -
+	 * početni znak u višelinijskim naredbama
+	 * 
+	 * @param arguments
+	 *            - argument gdje propisujemo što želimo vidjeti
+	 */
+	private static void symbols(String arguments) {
+		String[] array = arguments.split(" ");
+
+		switch (array.length) {
+		case 1: // samo ispis
+			switch (array[0]) {
+			case "PROMPT":
+				System.out.println("Symbol for PROMPT is \'" + PROMPTSYMBOL + "\'");
+				break;
+			case "MORELINES":
+				System.out.println("Symbol for MORELINES is \'" + MORELINESSYMBOL + "\'");
+				break;
+			case "MULTILINE":
+				System.out.println("Symbol for MULTILINES is \'" + MULTILINESYMBOL + "\'");
+				break;
+			default:
+				System.err.println("Unsupported symbol!");
+			}
+
+			break;
+		case 2:
+			switch (array[0]) {
+			case "PROMPT":
+				System.out.print("Symbol for PROMPT changed from \'" + PROMPTSYMBOL);
+				PROMPTSYMBOL = array[1].charAt(0);
+				System.out.println("\' to \'" + PROMPTSYMBOL + "\'");
+				break;
+			case "MORELINES":
+				System.out.print("Symbol for MORELINES changed from \'" + MORELINESSYMBOL);
+				MORELINESSYMBOL = array[1].charAt(0);
+				System.out.println("\' to \'" + MORELINESSYMBOL + "\'");
+				break;
+			case "MULTILINE":
+				System.out.print("Symbol for MULTILINE changed from \'" + MULTILINESYMBOL);
+				MULTILINESYMBOL = array[1].charAt(0);
+				System.out.println("\' to \'" + MULTILINESYMBOL + "\'");
+				break;
+			default:
+				System.err.println("Unsupported symbol!");
+			}
+
+			break;
+		default:
+			System.err.println("Wrong number of arguments!");
+		}
+	}
+
+	/**
 	 * Privatan razred koji sadrži glavni program za pokretanje ljuske
 	 * 
 	 * @author Mihael
@@ -303,8 +360,13 @@ public class MyShell implements Environment {
 					String line = shell.readLine();
 					String commandName = shell.extractCommandName(line);
 					String arguments = shell.extractArguments(line);
-					ShellCommand command = shell.commands().get(commandName);
-					status = command.executeCommand(shell, arguments);
+
+					if (commandName.equals("symbol")) {
+						symbols(arguments);
+					} else {
+						ShellCommand command = shell.commands().get(commandName);
+						status = command.executeCommand(shell, arguments);
+					}
 				} catch (IllegalArgumentException e) {
 					System.err.println(e.getMessage());
 				} catch (ShellIOException e) {

@@ -42,7 +42,6 @@ public class Functions {
 			index++;
 		}
 
-		System.out.println("Predano " + builder.toString());
 		return builder.toString();
 	}
 
@@ -73,6 +72,7 @@ public class Functions {
 					c = array[index + 1];
 				}
 			} else if (c == '\"') {
+				index++;
 				break;
 			}
 
@@ -115,8 +115,8 @@ public class Functions {
 				}
 			}
 
-			if (index < i) {
-				throw new IllegalArgumentException("Too much arguments!");
+			if (index < length) {
+				throw new IllegalArgumentException("Too many arguments!" + index + " " + length);
 			}
 		} catch (IndexOutOfBoundsException e) {
 			System.err.println("Error!");
@@ -150,6 +150,23 @@ public class Functions {
 		}
 
 		return builder.toString();
+	}
+
+	/**
+	 * Metoda koja od elemenata liste stvara novi string
+	 * 
+	 * @param readAllLines
+	 *            - sadržaj datoteke
+	 * @return sadržaj u obliku jednog stringa
+	 */
+	public static char[] fromList(List<String> readAllLines) {
+		StringBuilder builder = new StringBuilder();
+
+		for (String string : readAllLines) {
+			builder.append(string).append(" ");
+		}
+
+		return builder.toString().substring(0, builder.length() - 1).toCharArray();
 	}
 
 }

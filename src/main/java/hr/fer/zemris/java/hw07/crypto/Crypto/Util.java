@@ -13,6 +13,9 @@ public class Util {
 	 * @param keyText
 	 *            - heksadekadski niz
 	 * @return - polje bajtova
+	 * 
+	 * @throws IllegalArgumentException
+	 *             - ako se niz ne može pretvptiti u polje bajtova
 	 */
 	public static byte[] hextobyte(String keyText) {
 		byte[] array = new byte[keyText.length() / 2];
@@ -21,7 +24,7 @@ public class Util {
 			try {
 				array[i] = (byte) Integer.parseInt(keyText.substring(i * 2, i * 2 + 2), 16);
 			} catch (NumberFormatException e) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Argument can't be converted to byte array!");
 			}
 		}
 
@@ -36,7 +39,7 @@ public class Util {
 	 * @return znakovni prikaz polja
 	 */
 	public static String bytetohex(byte[] array) {
-		StringBuilder builder = new StringBuilder().append("");
+		StringBuilder builder = new StringBuilder();
 
 		for (byte pomByte : array) {
 			builder.append(String.format("%02x", pomByte));
@@ -44,4 +47,7 @@ public class Util {
 
 		return builder.toString();
 	}
+	
+	
+
 }
