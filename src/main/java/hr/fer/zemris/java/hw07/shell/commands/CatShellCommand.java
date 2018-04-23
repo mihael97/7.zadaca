@@ -2,6 +2,7 @@ package hr.fer.zemris.java.hw07.shell.commands;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import hr.fer.zemris.java.hw07.shell.ShellStatus;
  * @author Mihael
  *
  */
-public class Cat implements ShellCommand {
+public class CatShellCommand implements ShellCommand {
 	/**
 	 * Naziv naredbe
 	 */
@@ -30,7 +31,7 @@ public class Cat implements ShellCommand {
 	/**
 	 * Zadani konstruktor
 	 */
-	public Cat() {
+	public CatShellCommand() {
 		list.add("Command prints context of file to standard output. "
 				+ "It can have one or two arguments. First must be path to file,and second is charset. "
 				+ "If command is initialized with one argument,charset will be set to default charset.");
@@ -43,19 +44,21 @@ public class Cat implements ShellCommand {
 	 * @param env
 	 *            - referenca na ljusku
 	 * @param arguments
-	 *            - ne koristi se
+	 *            - path do datoteke(obavezno) i charset(opcionalno)
 	 * 
 	 * @return {@link ShellStatus} za nastavak programa
 	 */
 	@Override
 	public ShellStatus executeCommand(Environment env, String arguments) {
-		String[] array = arguments.split("\\s+");
+		String[] array = Functions.split(arguments, 2);
 
 		try {
 			for (String string : Files.readAllLines(Paths.get(array[0]),
-					array.length == 1 ? Charset.defaultCharset() : Charset.forName(array[2].trim()))) {
+					array[1] == null ? Charset.defaultCharset() : Charset.forName(array[1].trim()))) {
 				env.write(string);
 			}
+		} catch (IllegalCharsetNameException e) {
+			System.err.println("Charset " + array[1] + " doesn't exist");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -15,13 +15,33 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Razred koji implementira sučelje {@link SimpleFileVisitor} i služi za
+ * nerekurzivni prolazaka kroz datoteke
+ * 
+ * @author Mihael
+ *
+ */
 public class MyFileVisitor extends SimpleFileVisitor<Path> {
+	/**
+	 * Lista datoteka koje su do sada obrađene
+	 */
 	private List<String> list;
 
+	/**
+	 * Zadani konstruktor
+	 */
 	public MyFileVisitor() {
 		list = new ArrayList<>();
 	}
 
+	/**
+	 * Glavna metoda koja prolazi kroz sve datoteke i stavra opisnik datoteka koji
+	 * sadrži određene informacije o datoteki(direktorij,čitljiva,da li se može
+	 * pokrenuti ili modficirati,datum i vrijeme nastanka te naziv)
+	 * 
+	 * @return {@link FileVisitResult} za nastavak prolaska
+	 */
 	@Override
 	public FileVisitResult visitFile(Path path, BasicFileAttributes arg1) throws IOException {
 		File file = path.toFile();
@@ -37,7 +57,7 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
 		builder.append(" ");
 
 		builder.append(createTime(path));
-
+		builder.append(" ");
 		builder.append(file.getName());
 
 		list.add(builder.toString());
@@ -45,6 +65,14 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
 		return FileVisitResult.CONTINUE;
 	}
 
+	/**
+	 * Metoda stvara vrijeme izdrade i pretvara ga u zadani format(yyyy-MM-dd
+	 * HH:mm:ss)
+	 * 
+	 * @param path
+	 *            - put do datoteke
+	 * @return vrijeme izrade
+	 */
 	private String createTime(Path path) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -59,9 +87,13 @@ public class MyFileVisitor extends SimpleFileVisitor<Path> {
 		return null;
 	}
 
+	/**
+	 * Metoda vraća listu svih datoteka s opisom
+	 * 
+	 * @return lista datoteka
+	 */
 	public List<String> getList() {
 		return list;
 	}
 
-	
 }

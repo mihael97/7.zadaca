@@ -16,7 +16,7 @@ import hr.fer.zemris.java.hw07.shell.ShellStatus;
  * @author Mihael
  *
  */
-public class Mkdir implements ShellCommand {
+public class MkdirShellCommand implements ShellCommand {
 	/**
 	 * Naziv naredbe
 	 */
@@ -29,7 +29,7 @@ public class Mkdir implements ShellCommand {
 	/**
 	 * Zadani konstruktor
 	 */
-	public Mkdir() {
+	public MkdirShellCommand() {
 		list.add("Method accepts argument which reperesents path to new directory and creates it");
 	}
 
@@ -49,7 +49,9 @@ public class Mkdir implements ShellCommand {
 	@Override
 	public ShellStatus executeCommand(Environment env, String arguments) {
 		try {
-			Files.createDirectories(Paths.get(Functions.prepareForPath(arguments)));
+			Files.createDirectories(Paths.get(Functions.split(arguments, 1)[0]));
+		} catch (IllegalArgumentException e) {
+			System.err.println();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

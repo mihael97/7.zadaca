@@ -19,7 +19,7 @@ import hr.fer.zemris.java.hw07.shell.ShellStatus;
  * @author Mihael
  *
  */
-public class Ls implements ShellCommand {
+public class LsShellCommand implements ShellCommand {
 	/**
 	 * Naziv naredbe
 	 */
@@ -32,7 +32,7 @@ public class Ls implements ShellCommand {
 	/**
 	 * Zadani konstruktor
 	 */
-	public Ls() {
+	public LsShellCommand() {
 		list.add("Method prints statistic of all files. It prints file's name,time "
 				+ "and date when it was made,size and basic informations(executable,writable,"
 				+ "readable,is directory)");
@@ -56,7 +56,7 @@ public class Ls implements ShellCommand {
 	public ShellStatus executeCommand(Environment env, String arguments) {
 		MyFileVisitor visitor = new MyFileVisitor();
 		try {
-			Files.walkFileTree(Paths.get(arguments), visitor);
+			Files.walkFileTree(Paths.get(arguments.trim()), visitor);
 
 			for (String string : visitor.getList()) {
 				env.write(string);
