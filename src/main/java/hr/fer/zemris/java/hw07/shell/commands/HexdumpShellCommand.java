@@ -94,6 +94,13 @@ public class HexdumpShellCommand implements ShellCommand {
 		return ShellStatus.CONTINUE;
 	}
 
+	/**
+	 * Metoda koja dodaje dovoljno znakova nula da ukupna duljina bude 8
+	 * 
+	 * @param hexString
+	 *            - početan niz
+	 * @return niz duljine 8
+	 */
 	private Object makeString(String hexString) {
 		StringBuilder builder = new StringBuilder();
 

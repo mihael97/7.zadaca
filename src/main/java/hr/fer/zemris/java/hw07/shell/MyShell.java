@@ -82,13 +82,13 @@ public class MyShell implements Environment {
 		String str = new String();
 
 		try {
-			System.out.print("\n" + PROMPTSYMBOL + " ");
+			write("\n" + PROMPTSYMBOL + " ");
 			str = sc.nextLine();
 
 			list.add(str);
 			if (str.endsWith(String.valueOf(MORELINESSYMBOL))) {
 				while (true) {
-					System.out.print("\n" + MULTILINESYMBOL + " ");
+					write("\n" + MULTILINESYMBOL + " ");
 					str = sc.nextLine();
 					list.add(str);
 
@@ -115,7 +115,7 @@ public class MyShell implements Environment {
 	@Override
 	public void write(String text) throws ShellIOException {
 		try {
-			System.out.println(text);
+			System.out.print(text);
 		} catch (Exception e) {
 			throw new ShellIOException("Exception during writing on standard output!");
 		}
@@ -129,7 +129,7 @@ public class MyShell implements Environment {
 	 */
 	@Override
 	public void writeln(String text) throws ShellIOException {
-		write(text);
+		System.out.println(text);
 	}
 
 	/**
@@ -294,16 +294,16 @@ public class MyShell implements Environment {
 		case 1: // samo ispis
 			switch (array[0]) {
 			case "PROMPT":
-				System.out.println("Symbol for PROMPT is \'" + PROMPTSYMBOL + "\'");
+				System.out.print("Symbol for PROMPT is \'" + PROMPTSYMBOL + "\'");
 				break;
 			case "MORELINES":
-				System.out.println("Symbol for MORELINES is \'" + MORELINESSYMBOL + "\'");
+				System.out.print("Symbol for MORELINES is \'" + MORELINESSYMBOL + "\'");
 				break;
 			case "MULTILINE":
-				System.out.println("Symbol for MULTILINES is \'" + MULTILINESYMBOL + "\'");
+				System.out.print("Symbol for MULTILINES is \'" + MULTILINESYMBOL + "\'");
 				break;
 			default:
-				System.err.println("Unsupported symbol!");
+				System.err.print("Unsupported symbol!");
 			}
 
 			break;
@@ -312,20 +312,20 @@ public class MyShell implements Environment {
 			case "PROMPT":
 				System.out.print("Symbol for PROMPT changed from \'" + PROMPTSYMBOL);
 				PROMPTSYMBOL = array[1].charAt(0);
-				System.out.println("\' to \'" + PROMPTSYMBOL + "\'");
+				System.out.print("\' to \'" + PROMPTSYMBOL + "\'");
 				break;
 			case "MORELINES":
 				System.out.print("Symbol for MORELINES changed from \'" + MORELINESSYMBOL);
 				MORELINESSYMBOL = array[1].charAt(0);
-				System.out.println("\' to \'" + MORELINESSYMBOL + "\'");
+				System.out.print("\' to \'" + MORELINESSYMBOL + "\'");
 				break;
 			case "MULTILINE":
 				System.out.print("Symbol for MULTILINE changed from \'" + MULTILINESYMBOL);
 				MULTILINESYMBOL = array[1].charAt(0);
-				System.out.println("\' to \'" + MULTILINESYMBOL + "\'");
+				System.out.print("\' to \'" + MULTILINESYMBOL + "\'");
 				break;
 			default:
-				System.err.println("Unsupported symbol!");
+				System.err.print("Unsupported symbol!");
 			}
 
 			break;
